@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "640896118578",
+    "firebase_url": "https://bulars-828da.firebaseio.com",
+    "project_id": "bulars-828da",
+    "storage_bucket": "bulars-828da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640896118578:android:41c33a2b680529d0",
+        "android_client_info": {
+          "package_name": "com.example.mauxin.bulars"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640896118578-oo0bfqt5ceb222icepa24b1q2asdi20v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mauxin.bulars",
+            "certificate_hash": "e109e0ae26ec1ec6e1770188562b276f5cc650fe"
+          }
+        },
+        {
+          "client_id": "640896118578-rqhkci6e04im1bvjohvlfuiv8tpl0e9q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1BEohqhBA9Isu-b8-T5Cha1MLD5CcxDU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "640896118578-rqhkci6e04im1bvjohvlfuiv8tpl0e9q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "640896118578-n1i3ikp58k07bv07gfjau5le6dhbmsri.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mauxin.Bulars"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
