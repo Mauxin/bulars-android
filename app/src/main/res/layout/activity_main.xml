@@ -4,25 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".screens.MainActivity">
 
     <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="19dp"
             android:text="Bem Vindo ao Bulars!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.564"
-            android:id="@+id/recognizedTextView"/>
+            android:id="@+id/recognizedTextView"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" android:layout_marginTop="60dp"
+            app:layout_constraintTop_toBottomOf="@+id/exampleImageView" android:layout_marginBottom="100dp"
+            app:layout_constraintBottom_toTopOf="@+id/searchCameraButton"/>
     <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" tools:srcCompat="@drawable/bulicon"
-            android:id="@+id/exampleImageView" android:layout_marginBottom="80dp"
+            android:layout_height="225dp" tools:srcCompat="@drawable/bulicon"
+            android:id="@+id/exampleImageView"
             app:layout_constraintBottom_toTopOf="@+id/recognizedTextView" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="140dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="140dp" android:layout_marginTop="200dp"
-            app:layout_constraintTop_toTopOf="parent" app:srcCompat="@drawable/bulicon" android:visibility="visible"/>
+            android:layout_marginStart="140dp"
+            app:srcCompat="@drawable/bulicon" android:visibility="visible"
+            app:layout_constraintVertical_chainStyle="spread_inside" android:layout_marginTop="75dp"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarSearch" android:layout_marginBottom="60dp"/>
     <Button
             android:text="Câmera"
             android:layout_width="0dp"
@@ -32,5 +35,22 @@
             android:layout_marginStart="161dp" app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="177dp" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="162dp"/>
+    <android.support.v7.widget.Toolbar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:theme="?attr/actionBarTheme"
+            android:minHeight="?attr/actionBarSize"
+            android:id="@+id/toolbarSearch"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+    />
+    <SearchView
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="@+id/toolbarSearch"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbarSearch"
+            app:layout_constraintStart_toStartOf="@+id/toolbarSearch" android:layout_marginStart="120dp"
+            android:id="@+id/searchTextBar"/>
 
 </android.support.constraint.ConstraintLayout>
