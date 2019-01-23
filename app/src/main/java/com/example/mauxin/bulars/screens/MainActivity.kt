@@ -12,7 +12,6 @@ import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import com.example.mauxin.bulars.R
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -21,13 +20,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.text.FirebaseVisionText
-import kotlinx.android.synthetic.main.searchable.*
 
 
 class MainActivity : AppCompatActivity() {
 
     private var analytics: FirebaseAnalytics? = null
-    private var db: FirebaseFirestore? = null
 
     private var photoUriToLoad: Uri? = null
     private var imageBitmap: Bitmap? = null
@@ -36,29 +33,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         analytics = FirebaseAnalytics.getInstance(this)
-        db = FirebaseFirestore.getInstance()
         setSupportActionBar(toolbarSearch)
 
-        searchCameraButton.setOnClickListener { getImageFromFile() }
+        searchFileButton.setOnClickListener {
+            logClickEvent()
+            getImageFromFile()
+        }
+
+        cameraButton.setOnClickListener {
+            logClickEvent()
+            getImageFromCamera()
+        }
 
     }
-
-    /*fun changeText() {
-        logClickEvent()
-
-        db?.collection("medicates")
-            ?.whereEqualTo("name", "benalet")
-            ?.get()
-            ?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    for (document in task.result) {
-                       recognizedTextView.text = document["name"].toString()
-                    }
-                } else {
-                    recognizedTextView.text = "Erro"
-                }
-            }
-    }*/
 
     private fun getImageFromCamera() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -145,15 +132,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayBitmap(bitmap: Bitmap?) = bitmap?.let { exampleImageView.setImageBitmap(it) }
 
-    /*private fun searchMedicate(medicate: String) {
-        recognizedTextView.text = medicate
-    }
-
     fun logClickEvent() {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "android_button_click")
         analytics?.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
-    }*/
+    }
 
     private fun recognizeText(image: Bitmap?) = image?.let {
         val firImage  = FirebaseVisionImage.fromBitmap(it)
@@ -161,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         val detector = FirebaseVision.getInstance()
             .onDeviceTextRecognizer
 
-        val result = detector.processImage(firImage)
+        detector.processImage(firImage)
             .addOnSuccessListener { firebaseVisionText ->
 
                 var biggestText: FirebaseVisionText.Element? = firebaseVisionText.textBlocks.first().lines.first().elements.first()
@@ -177,16 +160,18 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 recognizedTextView.text = biggestText?.text
+                val searchIntent = Intent(this, SearchableActivity::class.java)
+                var medicate = biggestText?.text
+
+                medicate = medicate?.replace(".", "")?.toLowerCase()
+
+                searchIntent.putExtra("MEDICATE", medicate)
+                startActivity(searchIntent)
             }
             .addOnFailureListener {
-                recognizedTextView.text = "Deumerdaaa"
+                recognizedTextView.text = "Error"
             }
 
-
-        /*for (block in result.result!!.textBlocks) {
-            val blockText = block.text
-            recognizedTextView.text = blockText
-        }*/
     }
 
 }

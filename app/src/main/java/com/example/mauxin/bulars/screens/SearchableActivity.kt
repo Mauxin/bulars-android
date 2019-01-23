@@ -1,27 +1,35 @@
 package com.example.mauxin.bulars.screens
 
 import android.app.Activity
-import android.app.SearchManager
-import android.content.Intent
 import android.os.Bundle
 import com.example.mauxin.bulars.R
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.searchable.*
 
 class SearchableActivity: Activity() {
 
+    private var db: FirebaseFirestore? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.searchable)
-
-        if (Intent.ACTION_SEARCH == intent.action) {
-            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
-                searchMedicate(query)
-            }
-        }
+        db = FirebaseFirestore.getInstance()
+        searchMedicate(intent.getStringExtra("MEDICATE"))
     }
 
     private fun searchMedicate(medicate: String) {
-        textView.text = medicate
+        db?.collection("medicates")
+            ?.whereEqualTo("name", medicate)
+            ?.get()
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result!!) {
+                        resultTextView.text = document["medicineBottle"].toString()
+                    }
+                } else {
+                    resultTextView.text = "Erro"
+                }
+            }
     }
 
 }
