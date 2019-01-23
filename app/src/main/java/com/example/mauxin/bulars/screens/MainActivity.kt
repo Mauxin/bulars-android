@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
+import android.widget.SearchView
 import com.example.mauxin.bulars.R
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -45,6 +46,25 @@ class MainActivity : AppCompatActivity() {
             getImageFromCamera()
         }
 
+        searchTextBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                textSearching(query)
+                return false
+            }
+
+        })
+
+    }
+
+    fun textSearching(query: String) {
+        val searchTxtIntent = Intent(this, SearchableActivity::class.java)
+        searchTxtIntent.putExtra("MEDICATE", query)
+        startActivity(searchTxtIntent)
     }
 
     private fun getImageFromCamera() {
