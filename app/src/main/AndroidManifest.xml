@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".screens.MainActivity">
+        <activity android:name=".screens.MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +25,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".screens.SearchableActivity" >
+        <activity android:name=".screens.SearchableActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -32,6 +34,16 @@
 
         <meta-data
                 android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-                android:value="ocr" />
+                android:value="text" />
+
+        <provider
+                android:name="android.support.v4.content.FileProvider"
+                android:authorities="com.example.mauxin.bulars"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/file_paths" />
+        </provider>
     </application>
 </manifest>

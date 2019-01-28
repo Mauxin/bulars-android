@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         analytics = FirebaseAnalytics.getInstance(this)
-        setSupportActionBar(toolbarSearch)
+        //setSupportActionBar(toolbarSearch)
 
         searchFileButton.setOnClickListener {
             logClickEvent()
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                     "com.example.mauxin.bulars",
                     photoFile)
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUriToLoad)
-                startActivityForResult(takePictureIntent, 1)
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
             }
         }
     }
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         pickPhotoIntent.type = "image/*"
 
         if (pickPhotoIntent.resolveActivity(packageManager) != null) {
-            startActivityForResult(pickPhotoIntent, 2)
+            startActivityForResult(pickPhotoIntent, REQUEST_PICK_IMAGE)
         }
     }
 
@@ -124,8 +124,8 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK && data != null) {
             when (requestCode) {
-                1 -> getCameraImageFromResultData(data)
-                2 -> getFileImageFromResultData(data)
+                REQUEST_IMAGE_CAPTURE -> getCameraImageFromResultData(data)
+                REQUEST_PICK_IMAGE -> getFileImageFromResultData(data)
                 else -> Unit
             }
         }
@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
             extras["data"] as Bitmap
         }
 
-        recognizeText(imageBitmap)
+        imageBitmap?.let { recognizeText(imageBitmap)}
         displayBitmap(imageBitmap)
     }
 
@@ -192,6 +192,11 @@ class MainActivity : AppCompatActivity() {
                 recognizedTextView.text = "Error"
             }
 
+    }
+
+    companion object {
+        const val REQUEST_IMAGE_CAPTURE = 1
+        const val REQUEST_PICK_IMAGE = 2
     }
 
 }
