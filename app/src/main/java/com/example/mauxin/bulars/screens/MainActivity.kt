@@ -1,6 +1,5 @@
 package com.example.mauxin.bulars.screens
 
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,7 +12,6 @@ import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.widget.SearchView
-import android.widget.Toast
 import com.example.mauxin.bulars.R
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
