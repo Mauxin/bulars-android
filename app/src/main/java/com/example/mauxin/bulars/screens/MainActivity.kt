@@ -1,6 +1,7 @@
 package com.example.mauxin.bulars.screens
 
-import android.annotation.SuppressLint
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,7 +11,9 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
+import android.support.v7.app.AlertDialog
 import android.widget.SearchView
+import android.widget.Toast
 import com.example.mauxin.bulars.R
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -21,6 +24,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.text.FirebaseVisionText
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,14 +41,9 @@ class MainActivity : AppCompatActivity() {
         analytics = FirebaseAnalytics.getInstance(this)
         //setSupportActionBar(toolbarSearch)
 
-        searchFileButton.setOnClickListener {
-            logClickEvent()
-            getImageFromFile()
-        }
-
         cameraButton.setOnClickListener {
             logClickEvent()
-            getImageFromCamera()
+            showDialog()
         }
 
         searchTextBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -61,6 +61,28 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // Method to show an alert dialog with yes, no and cancel button
+    private fun showDialog(){
+        lateinit var dialog: AlertDialog
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle("Selecione sua imagem")
+
+        val dialogClickListener = DialogInterface.OnClickListener{ _, which ->
+            when(which){
+                DialogInterface.BUTTON_POSITIVE -> getImageFromCamera()
+                DialogInterface.BUTTON_NEGATIVE -> getImageFromFile()
+            }
+        }
+
+        builder.setPositiveButton("CÂMERA",dialogClickListener)
+        builder.setNegativeButton("GALERIA",dialogClickListener)
+        builder.setNeutralButton("CANCELAR",dialogClickListener)
+
+        dialog = builder.create()
+        dialog.show()
+    }
+
     fun textSearching(query: String) {
         val searchTxtIntent = Intent(this, SearchableActivity::class.java)
         searchTxtIntent.putExtra("MEDICATE", query)
@@ -71,9 +93,8 @@ class MainActivity : AppCompatActivity() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(packageManager) != null) {
 
-            val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
             val photoFile: File? = try {
-                createImageFile(storageDir)
+                createImageFile()
             } catch (exception: IOException) {
                 null
             }
@@ -89,20 +110,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    @SuppressLint("SimpleDateFormat")
-    @Throws(IOException::class)
-    fun createImageFile(storageDir: File): File {
+    fun createImageFile(): File {
         // Create an image file name
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val imageFileName = "JPEG_" + timeStamp + "_"
-
-
-        return File.createTempFile(
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
             imageFileName, /* prefix */
             ".jpg", /* suffix */
             storageDir      /* directory */
         )
+
+        return image
     }
 
     private fun getFileImageFromResultData(data: Intent) {
@@ -122,22 +141,17 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK && data != null) {
+        if (resultCode == RESULT_OK ) {
             when (requestCode) {
-                REQUEST_IMAGE_CAPTURE -> getCameraImageFromResultData(data)
-                REQUEST_PICK_IMAGE -> getFileImageFromResultData(data)
+                REQUEST_IMAGE_CAPTURE -> getCameraImageFromResultData()
+                REQUEST_PICK_IMAGE -> getFileImageFromResultData(data!!)
                 else -> Unit
             }
         }
     }
 
-    private fun getCameraImageFromResultData(data: Intent) {
-        imageBitmap = if (photoUriToLoad != null) {
-            loadPhotoFromUri(photoUriToLoad)
-        } else {
-            val extras = data.extras
-            extras["data"] as Bitmap
-        }
+    private fun getCameraImageFromResultData() {
+        imageBitmap = loadPhotoFromUri(photoUriToLoad)
 
         imageBitmap?.let { recognizeText(imageBitmap)}
         displayBitmap(imageBitmap)
