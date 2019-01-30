@@ -23,13 +23,9 @@ import java.util.*
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 
-
-
-
 class MainActivity : AppCompatActivity() {
 
     private var analytics: FirebaseAnalytics? = null
-
     private var photoUriToLoad: Uri? = null
     private var imageBitmap: Bitmap? = null
 
@@ -37,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         analytics = FirebaseAnalytics.getInstance(this)
-        //setSupportActionBar(toolbarSearch)
 
         cameraButton.setOnClickListener {
             logClickEvent()
@@ -45,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         searchTextBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
             override fun onQueryTextChange(newText: String): Boolean {
                 return false
             }
@@ -54,12 +48,10 @@ class MainActivity : AppCompatActivity() {
                 textSearching(query)
                 return false
             }
-
         })
 
     }
 
-    // Method to show an alert dialog with yes, no and cancel button
     private fun showDialog(){
         lateinit var dialog: AlertDialog
         val builder = AlertDialog.Builder(this)
@@ -109,7 +101,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun createImageFile(): File {
-        // Create an image file name
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val imageFileName = "JPEG_" + timeStamp + "_"
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
