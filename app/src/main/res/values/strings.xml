@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Bulars</string>
+    <string name="project_package">com.example.mauxin.bulars</string>
+
+
+    <string name="cancel">Cancelar</string>
+    <string name="ok">OK</string>
+    <string name="error">Ocorreu um erro inesperado</string>
+
+    <string name="camera">Câmera</string>
+    <string name="library">Galeria</string>
+    <string name="select_image">Selecione sua imagem</string>
 </resources>
